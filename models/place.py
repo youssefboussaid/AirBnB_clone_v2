@@ -38,4 +38,3 @@ class Place(BaseModel, Base):
     amenity_ids = []
     _amenities = relationship('Amenity', secondary='place_amenity',
                               viewonly=False, back_populates="place_amenities")
-    
