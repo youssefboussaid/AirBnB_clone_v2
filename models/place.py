@@ -38,3 +38,49 @@ class Place(BaseModel, Base):
     amenity_ids = []
     _amenities = relationship('Amenity', secondary='place_amenity',
                               viewonly=False, back_populates="place_amenities")
+
+    @property
+    def reviews(self):
+        """
+        the getter attribute reviews returns
+        the list of Review instances
+        with place_id equals to the current Place.id
+        """
+        from models import storage
+        r = []
+        all_reviews = storage.all(Review)
+        for v in all_reviews.values():
+            if v.place_id == self.id:
+                r.append(v)
+        return r
+
+    @property
+    def amenities(self):
+        """
+        Getter attribute amenities that returns the list of Amenity instances
+        based on the attribute amenity_ids that contains all Amenity.id linked
+        to the Place
+        """
+
+        return self._amenities
+
+    @amenities.setter
+    def amenities(self, value):
+        """
+        Setter attribute amenities that handles append method for adding an
+        Amenity.id to the attribute amenity_ids. This method should accept only
+        Amenity object, otherwise, do nothing.
+        """
+        if (getenv('HBNB_TYPE_STORAGE') != "db"):
+            try:
+                if (value.__class__.__name__ == "Amenity"):
+                    self.amenity_ids.append(value.id)
+            except Exception:
+                pass
+            from models import storage
+            all_amenities = storage.all(Amenity)
+            linked_amenities = []
+            for value in all_amenities.values():
+                if value.id in self.amenity_ids:
+                    linked_amenities.append(value)
+            self._amenities = linked_amenities
