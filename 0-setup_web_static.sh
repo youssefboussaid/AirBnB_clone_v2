@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-#Bash script that sets up your web servers
-#for the deployment of web_static
-
-sudo apt-get -y update
-sudo apt-get -y upgrade
-sudo apt-get -q -y install nginx
-sudo mkdir -p /data/web_static/{releases/test,shared}
-echo "This is a test" | sudo tee /data/web_static/releases/test/index.html
-sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-sudo chown -hR ubuntu:ubuntu /data/
-sudo sed -i '40i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
-sudo service ngnix restart
+# Bash Script to Setup Airbnb Static_web 
+sudo apt-get update -y
+sudo apt-get updgrade -y
+sudo apt-get install -y nginx
+mkdir -p  /data/web_static/
+mkdir -p /data/web_static/releases/test/
+mkdir /data/web_static/shared/
+echo "Hello AirBnb" | sudo tee /data/web_static/releases/test/index.html
+ln -sf /data/web_static/releases/test /data/web_static/current 
+chown ubuntu:ubuntu -hR /data/
+sudo sed -i '38i\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n' /etc/nginx/sites-available/default
+sudo service nginx restart
